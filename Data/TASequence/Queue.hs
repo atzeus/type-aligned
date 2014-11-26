@@ -11,7 +11,7 @@
 -- Stability   :  provisional
 -- Portability :  portable
 --
--- A type aligned sequence, a queue, with amortized case constant time: '|>', and 'tviewl'.
+-- A type aligned sequence, a queue, with amortized constant time: '|>', and 'tviewl'.
 --
 -- A simplified version of Okasaki's implicit recursive
 -- slowdown queues. 
@@ -19,9 +19,9 @@
 -- section 8.4: Queues based on implicit recursive slowdown
 --
 -----------------------------------------------------------------------------
-module Data.TASequence.Queue(module Data.TASequence.Class,Queue)  where
+module Data.TASequence.Queue(module Data.TASequence,Queue)  where
 
-import Data.TASequence.Class
+import Data.TASequence
 
 data P c a b where
   (:*) :: c a w -> c w b -> P c a b

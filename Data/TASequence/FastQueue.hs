@@ -17,9 +17,9 @@
 --
 -----------------------------------------------------------------------------
 
-module Data.TASequence.FastQueue where
+module Data.TASequence.FastQueue(module Data.TASequence, FastQueue) where
 
-import Data.TASequence.Class
+import Data.TASequence
 import Data.TASequence.ConsList
 import Data.TASequence.SnocList
 

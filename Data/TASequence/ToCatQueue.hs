@@ -13,16 +13,16 @@
 --
 -- A purely functional catenable queue representation with
 -- that turns takes a purely functional queue and turns in it into
--- a catenable queue, i.e. with the same complexity for (><) as for (|>)
+-- a catenable queue, i.e. with the same complexity for '><' as for '|>'
 -- Based on Purely functional data structures by Chris Okasaki 
 -- section 7.2: Catenable lists
 --
 -----------------------------------------------------------------------------
 
-module Data.TASequence.ToCatQueue(ToCatQueue) where
+module Data.TASequence.ToCatQueue(module Data.TASequence,ToCatQueue) where
 
 
-import Data.TASequence.Class
+import Data.TASequence
 
 -- | The catenable queue type. The first type argument is the 
 -- type of the queue we use (|>)

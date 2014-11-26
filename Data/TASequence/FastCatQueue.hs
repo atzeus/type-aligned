@@ -12,9 +12,9 @@
 -- A type aligned sequence, a catanable queue, with worst case constant time: '><', '|>', '<|' and 'tviewl'.
 --
 -----------------------------------------------------------------------------
-module Data.TASequence.FastCatQueue(module Data.TASequence.Class, FastTCQueue) where
+module Data.TASequence.FastCatQueue(module Data.TASequence, FastTCQueue) where
 
-import Data.TASequence.Class
+import Data.TASequence
 import Data.TASequence.FastQueue
 import Data.TASequence.ToCatQueue
 

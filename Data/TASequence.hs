@@ -4,7 +4,7 @@
 
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Data.TASequence.Class
+-- Module      :  Data.TASequence
 -- Copyright   :  (c) Atze van der Ploeg 2014
 -- License     :  BSD-style
 -- Maintainer  :  atzeus@gmail.org
@@ -28,7 +28,7 @@
 -- the last element has type (c y b), for some y.
 --
 -- The simplest type aligned sequence data structure is a list, see "Data.TASequence.ConsList". The other modules
--- give various other type aligned sequence data structures.
+-- give various other type aligned sequence data structures. The data structure "Data.TASequence.FastCatQueue" supports the most operations in worst case constant time.
 --
 --
 -- See the paper Reflection without Remorse: Revealing a hidden sequence to speed up Monadic Reflection, Atze van der Ploeg and Oleg Kiselyov, Haskell Symposium 2014
@@ -37,7 +37,7 @@
 -- Paper: <http://homepages.cwi.nl/~ploeg/zseq.pdf>
 -- Talk : <http://www.youtube.com/watch?v=_XoI65Rxmss>
 -----------------------------------------------------------------------------
-module Data.TASequence.Class(TASequence(..), TAViewL(..), TAViewR(..)) where
+module Data.TASequence(TASequence(..), TAViewL(..), TAViewR(..)) where
 
 import Control.Category
 import Prelude hiding ((.),id)

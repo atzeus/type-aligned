@@ -13,17 +13,17 @@
 -- Stability   :  provisional
 -- Portability :  portable
 --
--- A type aligned sequence, a catanable deque, with amortized /O(log n)/ case constant time: '><','<|',|>', 'tviewl' and 'tviewr'.
+-- A type aligned sequence, a catanable deque, with amortized /O(log n)/  constant time: '><','<|','|>', 'tviewl' and 'tviewr'.
 --
 -- Based on:  "Finger trees: a simple general-purpose data structure"
 --   Ralf Hinze and Ross Paterson. in Journal of Functional Programming16:2 (2006), pages 197-217.
 --
 -----------------------------------------------------------------------------
-module Data.TASequence.FingerTree (module Data.TASequence.Class, FingerTree ) where
+module Data.TASequence.FingerTree (module Data.TASequence, FingerTree ) where
 
 
 
-import Data.TASequence.Class
+import Data.TASequence
 
 
 data FingerTree r a b where

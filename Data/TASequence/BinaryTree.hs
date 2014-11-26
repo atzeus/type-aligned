@@ -15,9 +15,9 @@
 -- elements and then nodes are '><'.
 --
 -----------------------------------------------------------------------------
-module Data.TASequence.BinaryTree(module Data.TASequence.Class, BinaryTree) where
+module Data.TASequence.BinaryTree(module Data.TASequence, BinaryTree) where
 
-import  Data.TASequence.Class
+import  Data.TASequence
 
 data BinaryTree c x y where
   Empty :: BinaryTree c x x

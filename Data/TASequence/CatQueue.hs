@@ -19,10 +19,10 @@
 --
 -----------------------------------------------------------------------------
 
-module Data.TASequence.ToCatQueue(ToCatQueue) where
+module Data.TASequence.ToCatQueue(module Data.TASequence,ToCatQueue) where
 
 
-import Data.TASequence.Class
+import Data.TASequence
 
 -- | The catenable queue type. The first type argument is the 
 -- type of the queue we use (|>)

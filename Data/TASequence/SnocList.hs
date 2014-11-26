@@ -14,9 +14,9 @@
 --
 -----------------------------------------------------------------------------
 
-module Data.TASequence.SnocList(module Data.TASequence.Class,SnocList(..))  where
+module Data.TASequence.SnocList(module Data.TASequence,SnocList(..))  where
 
-import Data.TASequence.Class
+import Data.TASequence
 
 data SnocList c x y where
   SNil :: SnocList c x x

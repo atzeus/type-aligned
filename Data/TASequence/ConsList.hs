@@ -14,8 +14,8 @@
 -- A type aligned sequence, a head-tail list, with worst case constant time: '<|', and 'tviewl'.
 --
 -----------------------------------------------------------------------------
-module Data.TASequence.ConsList(module Data.TASequence.Class,ConsList(..)) where
-import Data.TASequence.Class
+module Data.TASequence.ConsList(module Data.TASequence,ConsList(..)) where
+import Data.TASequence
 
 data ConsList c x y where
   CNil :: ConsList c x x
