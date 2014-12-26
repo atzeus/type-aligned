@@ -31,7 +31,6 @@ data FingerTree r a b where
   Single :: r a b -> FingerTree r a b
   Deep   :: !(Digit r a b) -> FingerTree (Node r) b c -> !(Digit r c d) -> FingerTree r a d
 
-
 data Node r a b where
   Node2 :: r a b -> r b c -> Node r a c
   Node3 :: r a b -> r b c -> r c d -> Node r a d
@@ -187,3 +186,17 @@ nodes (a ::: b ::: c ::: d ::: ZNil) = Node2 a b ::: Node2 c d ::: ZNil
 nodes (a ::: b ::: c ::: xs) = Node3 a b c ::: nodes xs
 
 
+instance Maps Node where
+  maps phi (Node2 r s) = Node2 (phi r) (phi s)
+  maps phi (Node3 r s t) = Node3 (phi r) (phi s) (phi t)
+  
+instance Maps Digit  where
+  maps phi (One r) = One (phi r) 
+  maps phi (Two r s) = Two (phi r) (phi s)
+  maps phi (Three r s t) = Three (phi r) (phi s) (phi t)
+  maps phi (Four r s t u) = Four (phi r) (phi s) (phi t) (phi u)
+
+instance Maps FingerTree where
+  maps phi Empty = Empty
+  maps phi (Single s) = Single (phi s)
+  maps phi (Deep d f d') = Deep (maps phi d) (maps (maps phi) f) (maps phi d')

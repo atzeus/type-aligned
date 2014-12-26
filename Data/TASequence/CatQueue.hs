@@ -46,3 +46,7 @@ instance TASequence q => TASequence (ToCatQueue q) where
      CN x q :< t  -> CN x (q `snoc` linkAll t)
     snoc q C0  = q
     snoc q r   = q |> r
+
+instance Maps q => ToCatQueue q where
+  maps phi C0 = C0
+  maps phi (CN c q) = CN (phi c) (maps (maps phi) q)

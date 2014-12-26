@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances #-}
+{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,RankNTypes #-}
 
 
 
@@ -37,7 +37,7 @@
 -- Paper: <http://homepages.cwi.nl/~ploeg/zseq.pdf>
 -- Talk : <http://www.youtube.com/watch?v=_XoI65Rxmss>
 -----------------------------------------------------------------------------
-module Data.TASequence(TASequence(..), TAViewL(..), TAViewR(..)) where
+module Data.TASequence(TASequence(..), TAViewL(..), TAViewR(..),Maps(..)) where
 
 import Control.Category
 import Prelude hiding ((.),id)
@@ -89,7 +89,8 @@ data TAViewR s c x y where
    TAEmptyR  :: TAViewR s c x x
    (:>)     :: s c x y -> c y z -> TAViewR s c x z
 
-
+class Maps s where
+  maps :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
 
 instance TASequence s => Category (s c) where
   id = tempty
