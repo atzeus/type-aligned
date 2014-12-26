@@ -56,4 +56,9 @@ instance TASequence Queue where
            buf2queue (B1 a)        = Q1 a
            buf2queue(B2 (a :* b))  = QN (B1 a) Q0 (B1 b)
   
-             
+instance Maps P where
+  maps phi (a :* b) = phi a :* phi b
+  
+instance Maps B where
+  maps phi (B1 c) = B1 (phi c)
+  maps phi (B2 p) = B2 (maps phi p)
