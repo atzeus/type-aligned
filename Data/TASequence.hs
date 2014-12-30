@@ -70,43 +70,37 @@ class TASequence s where
   (><)       :: s c x y -> s c y z  -> s c x z
   -- | View a type aligned sequence from the left
   tviewl     :: s c x y -> TAViewL s c x y
-{- | View a type aligned sequence from the right
-         
-Default definition:
-
-> tviewr q = case tviewl q of 
->   TAEmptyL -> TAEmptyR
->   h :< t -> case tviewr t of
->        TAEmptyR -> tempty   :> h
->        p :> l   -> (h <| p) :> l
-
--}
-
+  -- | View a type aligned sequence from the right
+  --       
+  -- Default definition:
+  -- 
+  -- > tviewr q = case tviewl q of 
+  -- >   TAEmptyL -> TAEmptyR
+  -- >   h :< t -> case tviewr t of
+  -- >        TAEmptyR -> tempty   :> h
+  -- >        p :> l   -> (h <| p) :> l
   tviewr     :: s c x y -> TAViewR s c x y
-{- | Append a single element to the right
+  -- | Append a single element to the right
+  --
+  -- Default definition:
+  -- 
+  -- > l |> r = l >< tsingleton r
 
-Default definition:
-
-> l |> r = l >< tsingleton r
-
--}
   (|>)       :: s c x y -> c y z -> s c x z
-{- | Append a single element to the left
+  -- | Append a single element to the left
+  -- 
+  -- Default definition:
+  --
+  -- > l <| r = tsingleton l >< r
 
-Default definition:
-
-> l <| r = tsingleton l >< r
-
--}
   (<|)       :: c x y -> s c y z -> s c x z
-{- | Apply a function to all elements in a type aligned sequence
-
-Default definition:
-
-> tmap f q = case tviewl q of
->    TAEmptyL -> tempty
->    h :< t -> f h <| tmap f t
--}
+  -- | Apply a function to all elements in a type aligned sequence
+  -- 
+  -- Default definition:
+  -- 
+  -- > tmap f q = case tviewl q of
+  -- >    TAEmptyL -> tempty
+  -- >    h :< t -> f h <| tmap f t
   tmap       :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
   
   l |> r = l >< tsingleton r
