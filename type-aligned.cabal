@@ -1,5 +1,5 @@
 Name:                type-aligned
-Version:             0.9.3
+Version:             0.9.4
 Synopsis:	         Various type-aligned sequence data structures.
 Description:         Various data structures for type aligned sequences: heterogeneous sequences where the types enforce the element order.
 License:             BSD3
