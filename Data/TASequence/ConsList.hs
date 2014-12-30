@@ -27,3 +27,8 @@ instance TASequence ConsList where
   (<|) = Cons
   tviewl CNil = TAEmptyL
   tviewl (Cons h t) = h :< t
+
+instance Maps ConsList where
+  maps phi CNil = CNil
+  maps phi (Cons c s) = Cons  (phi c) (maps phi s)
+  

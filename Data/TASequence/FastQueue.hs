@@ -48,3 +48,5 @@ instance TASequence FastQueue where
  tviewl (RQ CNil SNil CNil) = TAEmptyL
  tviewl (RQ (h `Cons` t) f a) = h :< queue t f a
 
+instance Maps FastQueue where
+  maps phi (RQ a b c) = RQ (maps phi a) (maps phi b) (maps phi c)
