@@ -73,28 +73,36 @@ class TASequence s where
 {- | View a type aligned sequence from the right
          
 Default definition:
+
 > tviewr q = case tviewl q of 
 >   TAEmptyL -> TAEmptyR
 >   h :< t -> case tviewr t of
 >        TAEmptyR -> tempty   :> h
 >        p :> l   -> (h <| p) :> l
+
 -}
+
   tviewr     :: s c x y -> TAViewR s c x y
 {- | Append a single element to the right
 
 Default definition:
+
 > l |> r = l >< tsingleton r
+
 -}
   (|>)       :: s c x y -> c y z -> s c x z
 {- | Append a single element to the left
 
 Default definition:
+
 > l <| r = tsingleton l >< r
+
 -}
   (<|)       :: c x y -> s c y z -> s c x z
 {- | Apply a function to all elements in a type aligned sequence
 
 Default definition:
+
 > tmap f q = case tviewl q of
 >    TAEmptyL -> tempty
 >    h :< t -> f h <| tmap f t
