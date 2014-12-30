@@ -1,5 +1,5 @@
 Name:                type-aligned
-Version:             0.9.1
+Version:             0.9.3
 Synopsis:	         Various type-aligned sequence data structures.
 Description:         Various data structures for type aligned sequences: heterogeneous sequences where the types enforce the element order.
 License:             BSD3
@@ -16,7 +16,7 @@ Library
   Build-Depends: base >= 2 && <= 6
   Exposed-modules: Data.TASequence.BinaryTree, Data.TASequence, Data.TASequence.ConsList, Data.TASequence.FastCatQueue,  Data.TASequence.FastQueue, Data.TASequence.FingerTree, Data.TASequence.Queue, Data.TASequence.SnocList, Data.TASequence.ToCatQueue
 
-  Extensions:	 GADTs, TypeSynonymInstances,FlexibleInstances, ViewPatterns, TypeOperators
+  Extensions:	 GADTs, ViewPatterns, TypeOperators, Rank2Types
 
 source-repository head
     type:     git

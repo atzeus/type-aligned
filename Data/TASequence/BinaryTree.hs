@@ -34,7 +34,6 @@ instance TASequence BinaryTree where
   tviewl (Node (Leaf c) r)   = c :< r
   tviewl (Node Empty r)      = tviewl r
                         
-instance Maps BinaryTree where
-  maps phi Empty = Empty
-  maps phi (Leaf c) = Leaf (phi c)
-  maps phi (Node b b') = Node (maps phi b) (maps phi b')
+  tmap phi Empty = Empty
+  tmap phi (Leaf c) = Leaf (phi c)
+  tmap phi (Node b b') = Node (tmap phi b) (tmap phi b')

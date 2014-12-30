@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, DataKinds, TypeOperators #-}
+{-# LANGUAGE Rank2Types,GADTs, DataKinds, TypeOperators #-}
 
 
 
@@ -55,10 +55,13 @@ instance TASequence Queue where
                l :< m -> QN (B2 l) m r
            buf2queue (B1 a)        = Q1 a
            buf2queue(B2 (a :* b))  = QN (B1 a) Q0 (B1 b)
+  tmap f Q0 = Q0
+  tmap f (Q1 x) = Q1 (f x)
+  tmap f (QN l m r) = QN (tmapb f l) (tmap (tmapp f) m) (tmapb f r)
+
+tmapp :: (forall x y. c x y -> d x y) -> P c x y -> P d x y
+tmapp phi (a :* b) = phi a :* phi b
   
-instance Maps P where
-  maps phi (a :* b) = phi a :* phi b
-  
-instance Maps B where
-  maps phi (B1 c) = B1 (phi c)
-  maps phi (B2 p) = B2 (maps phi p)
+tmapb :: (forall x y. c x y -> d x y) -> B c x y -> B d x y
+tmapb phi (B1 c) = B1 (phi c)
+tmapb phi (B2 p) = B2 (tmapp phi p)

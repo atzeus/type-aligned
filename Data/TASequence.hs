@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,RankNTypes #-}
+{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types #-}
 
 
 
@@ -37,7 +37,7 @@
 -- Paper: <http://homepages.cwi.nl/~ploeg/zseq.pdf>
 -- Talk : <http://www.youtube.com/watch?v=_XoI65Rxmss>
 -----------------------------------------------------------------------------
-module Data.TASequence(TASequence(..), TAViewL(..), TAViewR(..),Maps(..)) where
+module Data.TASequence(TASequence(..), TAViewL(..), TAViewR(..)) where
 
 import Control.Category
 import Prelude hiding ((.),id)
@@ -45,22 +45,61 @@ import Prelude hiding ((.),id)
 infixr 5 <|
 infixl 5 |>
 infix 5 ><
+{- | A type class for type aligned sequences
+ 
+Minimal complete defention: 'tempty' and 'tsingleton' and ('tviewl' or 'tviewr') and ('><' or '|>' or '<|')
 
--- | minimal complete defention: 'tempty' and 'tsingleton' and ('tviewl' or 'tviewr') and ('><' or '|>' or '<|')
+Instances should satisfy the following laws:
+
+Category laws:
+> tempty >< x == x
+> x >< tempty == x
+> (x >< y) >< z = x >< (y >< z)
+
+Observation laws:
+> tviewl (tsingleton e >< s) == e :< s
+> tviewl tempty == TAEmptyL
+
+The behaviour of '<|','|>', 'tmap' and 'tviewr' is implied by the above laws and their default definitions.
+-}
 class TASequence s where
 
   tempty     :: s c x x
   tsingleton :: c x y -> s c x y
   -- | Append two type aligned sequences
   (><)       :: s c x y -> s c y z  -> s c x z
-  -- | View the type aligned sequence from the left
+  -- | View a type aligned sequence from the left
   tviewl     :: s c x y -> TAViewL s c x y
-  -- | View the type aligned sequence from the right
+{- | View a type aligned sequence from the right
+         
+Default definition:
+> tviewr q = case tviewl q of 
+>   TAEmptyL -> TAEmptyR
+>   h :< t -> case tviewr t of
+>        TAEmptyR -> tempty   :> h
+>        p :> l   -> (h <| p) :> l
+-}
   tviewr     :: s c x y -> TAViewR s c x y
-  -- | Append a single element to the right
+{- | Append a single element to the right
+
+Default definition:
+> l |> r = l >< tsingleton r
+-}
   (|>)       :: s c x y -> c y z -> s c x z
-  -- | Append a single element to the left
+{- | Append a single element to the left
+
+Default definition:
+> l <| r = tsingleton l >< r
+-}
   (<|)       :: c x y -> s c y z -> s c x z
+{- | Apply a function to all elements in a type aligned sequence
+
+Default definition:
+> tmap f q = case tviewl q of
+>    TAEmptyL -> tempty
+>    h :< t -> f h <| tmap f t
+-}
+  tmap       :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
   
   l |> r = l >< tsingleton r
   l <| r = tsingleton l >< r
@@ -80,6 +119,10 @@ class TASequence s where
         TAEmptyR -> tempty   :> h
         p :> l   -> (h <| p) :> l
 
+  tmap f q = case tviewl q of
+    TAEmptyL -> tempty
+    h :< t -> f h <| tmap f t
+
 
 data TAViewL s c x y where
    TAEmptyL  :: TAViewL s c x x
@@ -89,9 +132,6 @@ data TAViewR s c x y where
    TAEmptyR  :: TAViewR s c x x
    (:>)     :: s c x y -> c y z -> TAViewR s c x z
 
-class Maps s where
-  maps :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
-
 instance TASequence s => Category (s c) where
   id = tempty
-  (.) = flip (><) -- not (><): type error
+  (.) = flip (><)

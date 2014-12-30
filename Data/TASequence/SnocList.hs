@@ -28,7 +28,5 @@ instance TASequence SnocList where
   (|>) = Snoc
   tviewr SNil = TAEmptyR
   tviewr (Snoc p l) = p :> l
-
-instance Maps SnocList where
-  maps phi SNil = SNil
-  maps phi (Snoc s c) = Snoc (maps phi s) (phi c)
+  tmap phi SNil = SNil
+  tmap phi (Snoc s c) = Snoc (tmap phi s) (phi c)

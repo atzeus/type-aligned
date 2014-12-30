@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE Rank2Types,GADTs #-}
 
 
 
@@ -66,6 +66,10 @@ instance TASequence FingerTree where
             h :::< t -> deepr pr m t :> h
 
   xs >< ys = app3 xs ZNil ys
+
+  tmap f Empty = Empty
+  tmap f (Single a) = Single (f a)
+  tmap f (Deep l m r) = Deep (mapd f l) (tmap (mapn f) m) (mapd f r)
 
 
 
@@ -185,18 +189,14 @@ nodes (a ::: b ::: c ::: ZNil) = Node3 a b c ::: ZNil
 nodes (a ::: b ::: c ::: d ::: ZNil) = Node2 a b ::: Node2 c d ::: ZNil
 nodes (a ::: b ::: c ::: xs) = Node3 a b c ::: nodes xs
 
-
-instance Maps Node where
-  maps phi (Node2 r s) = Node2 (phi r) (phi s)
-  maps phi (Node3 r s t) = Node3 (phi r) (phi s) (phi t)
+mapn :: (forall x y. c x y -> d x y) -> Node c x y -> Node d x y
+mapn phi (Node2 r s) = Node2 (phi r) (phi s)
+mapn phi (Node3 r s t) = Node3 (phi r) (phi s) (phi t)
   
-instance Maps Digit  where
-  maps phi (One r) = One (phi r) 
-  maps phi (Two r s) = Two (phi r) (phi s)
-  maps phi (Three r s t) = Three (phi r) (phi s) (phi t)
-  maps phi (Four r s t u) = Four (phi r) (phi s) (phi t) (phi u)
+mapd :: (forall x y. c x y -> d x y) -> Digit c x y -> Digit d x y
+mapd phi (One r) = One (phi r) 
+mapd phi (Two r s) = Two (phi r) (phi s)
+mapd phi (Three r s t) = Three (phi r) (phi s) (phi t)
+mapd phi (Four r s t u) = Four (phi r) (phi s) (phi t) (phi u)
 
-instance Maps FingerTree where
-  maps phi Empty = Empty
-  maps phi (Single s) = Single (phi s)
-  maps phi (Deep d f d') = Deep (maps phi d) (maps (maps phi) f) (maps phi d')
+

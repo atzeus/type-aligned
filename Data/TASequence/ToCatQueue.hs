@@ -47,6 +47,5 @@ instance TASequence q => TASequence (ToCatQueue q) where
     snoc q C0  = q
     snoc q r   = q |> r
 
-instance Maps q => Maps (ToCatQueue q) where
-  maps phi C0 = C0
-  maps phi (CN c q) = CN (phi c) (maps (maps phi) q)
+ tmap phi C0 = C0
+ tmap phi (CN c q) = CN (phi c) (tmap (tmap phi) q)
