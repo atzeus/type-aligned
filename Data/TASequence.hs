@@ -52,11 +52,13 @@ Minimal complete defention: 'tempty' and 'tsingleton' and ('tviewl' or 'tviewr')
 Instances should satisfy the following laws:
 
 Category laws:
+
 > tempty >< x == x
 > x >< tempty == x
 > (x >< y) >< z = x >< (y >< z)
 
 Observation laws:
+
 > tviewl (tsingleton e >< s) == e :< s
 > tviewl tempty == TAEmptyL
 
