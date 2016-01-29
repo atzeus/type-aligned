@@ -19,6 +19,7 @@
 
 module Data.TASequence.FastQueue(module Data.TASequence, FastQueue) where
 
+import Control.Category
 import Data.TASequence
 import Data.TASequence.ConsList
 import Data.TASequence.SnocList
@@ -49,3 +50,7 @@ instance TASequence FastQueue where
  tviewl (RQ (h `Cons` t) f a) = h :< queue t f a
 
  tmap phi (RQ a b c) = RQ (tmap phi a) (tmap phi b) (tmap phi c)
+
+instance Category (FastQueue c) where
+  id = tempty
+  (.) = flip (><)

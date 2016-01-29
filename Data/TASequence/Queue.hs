@@ -21,6 +21,7 @@
 -----------------------------------------------------------------------------
 module Data.TASequence.Queue(module Data.TASequence,Queue)  where
 
+import Control.Category
 import Data.TASequence
 
 data P c a b where
@@ -58,6 +59,10 @@ instance TASequence Queue where
   tmap f Q0 = Q0
   tmap f (Q1 x) = Q1 (f x)
   tmap f (QN l m r) = QN (tmapb f l) (tmap (tmapp f) m) (tmapb f r)
+
+instance Category (Queue c) where
+  id = tempty
+  (.) = flip (><)
 
 tmapp :: (forall x y. c x y -> d x y) -> P c x y -> P d x y
 tmapp phi (a :* b) = phi a :* phi b

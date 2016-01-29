@@ -17,6 +17,7 @@
 -----------------------------------------------------------------------------
 module Data.TASequence.BinaryTree(module Data.TASequence, BinaryTree) where
 
+import  Control.Category
 import  Data.TASequence
 
 data BinaryTree c x y where
@@ -37,3 +38,7 @@ instance TASequence BinaryTree where
   tmap phi Empty = Empty
   tmap phi (Leaf c) = Leaf (phi c)
   tmap phi (Node b b') = Node (tmap phi b) (tmap phi b')
+
+instance Category (BinaryTree c) where
+  id = tempty
+  (.) = flip (><)

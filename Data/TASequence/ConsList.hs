@@ -15,6 +15,7 @@
 --
 -----------------------------------------------------------------------------
 module Data.TASequence.ConsList(module Data.TASequence,ConsList(..)) where
+import Control.Category
 import Data.TASequence
 
 data ConsList c x y where
@@ -28,4 +29,6 @@ instance TASequence ConsList where
   tviewl CNil = TAEmptyL
   tviewl (Cons h t) = h :< t
 
-  
+instance Category (ConsList c) where
+  id = tempty
+  (.) = flip (><)

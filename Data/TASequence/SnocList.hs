@@ -16,6 +16,7 @@
 
 module Data.TASequence.SnocList(module Data.TASequence,SnocList(..))  where
 
+import Control.Category
 import Data.TASequence
 
 data SnocList c x y where
@@ -30,3 +31,7 @@ instance TASequence SnocList where
   tviewr (Snoc p l) = p :> l
   tmap phi SNil = SNil
   tmap phi (Snoc s c) = Snoc (tmap phi s) (phi c)
+
+instance Category (SnocList c) where
+  id = tempty
+  (.) = flip (><)

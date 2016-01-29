@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types #-}
+{-# LANGUAGE GADTs,Rank2Types #-}
 
 
 
@@ -135,7 +135,3 @@ data TAViewL s c x y where
 data TAViewR s c x y where
    TAEmptyR  :: TAViewR s c x x
    (:>)     :: s c x y -> c y z -> TAViewR s c x z
-
-instance TASequence s => Category (s c) where
-  id = tempty
-  (.) = flip (><)
