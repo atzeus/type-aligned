@@ -47,12 +47,12 @@ instance TASequence FingerTree where
 
   Empty                     |> a = Single a
   Single b                  |> a = Deep (One b) Empty (One a)
-  Deep pr m (Four e d c b)  |> a = Deep pr (m |> Node3 e d c) (Two b a)
+  Deep pr m (Four e d c b)  |> a = m `seq` Deep pr (m |> Node3 e d c) (Two b a)
   Deep pr m sf              |> a = Deep pr m (appendd sf (One a))
 
   a <| Empty                     = Single a
   a <| Single b                  = Deep (One a) Empty (One b) 
-  a <| Deep (Four b c d e) m sf  = Deep (Two a b) (Node3 c d e <| m) sf
+  a <| Deep (Four b c d e) m sf  = m `seq` Deep (Two a b) (Node3 c d e <| m) sf
   a <| Deep pr m sf              = Deep (appendd (One a) pr) m sf
 
   tviewl Empty = TAEmptyL
