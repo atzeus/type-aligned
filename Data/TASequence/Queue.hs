@@ -1,4 +1,4 @@
-{-# LANGUAGE Rank2Types,GADTs, DataKinds, TypeOperators #-}
+{-# LANGUAGE Rank2Types,GADTs, DataKinds, PolyKinds, TypeOperators #-}
 
 
 

@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, ViewPatterns, TypeOperators #-}
+{-# LANGUAGE GADTs, ViewPatterns, TypeOperators, PolyKinds #-}
 
 
 -----------------------------------------------------------------------------

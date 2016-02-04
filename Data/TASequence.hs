@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types #-}
+{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types, KindSignatures, PolyKinds #-}
 
 
 
@@ -64,7 +64,7 @@ Observation laws:
 
 The behaviour of '<|','|>', 'tmap' and 'tviewr' is implied by the above laws and their default definitions.
 -}
-class TASequence s where
+class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
 
   tempty     :: s c x x
   tsingleton :: c x y -> s c x y
