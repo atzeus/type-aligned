@@ -1,4 +1,4 @@
-{-# LANGUAGE Rank2Types,GADTs #-}
+{-# LANGUAGE Rank2Types,GADTs, PolyKinds #-}
 
 
 
