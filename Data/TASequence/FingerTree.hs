@@ -22,7 +22,7 @@
 module Data.TASequence.FingerTree (module Data.TASequence, FingerTree ) where
 
 
-
+import Control.Category
 import Data.TASequence
 
 
@@ -71,7 +71,9 @@ instance TASequence FingerTree where
   tmap f (Single a) = Single (f a)
   tmap f (Deep l m r) = Deep (mapd f l) (tmap (mapn f) m) (mapd f r)
 
-
+instance Category (FingerTree c) where
+  id = tempty
+  (.) = flip (><)
 
 toTree :: Digit r a b -> FingerTree r a b
 toTree (One a)         = Single a
@@ -146,7 +148,7 @@ fromListR (c :::< b :::< a :::< ZNilR) = Three a b c
 fromListR (d :::< c :::< b :::< a :::< ZNilR) = Four a b c d
 
 
-rev = toList . fromListR 
+rev = toList Prelude.. fromListR
 
 
 

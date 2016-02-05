@@ -22,6 +22,7 @@
 module Data.TASequence.ToCatQueue(module Data.TASequence,ToCatQueue) where
 
 
+import Control.Category
 import Data.TASequence
 
 -- | The catenable queue type. The first type argument is the 
@@ -49,3 +50,7 @@ instance TASequence q => TASequence (ToCatQueue q) where
 
  tmap phi C0 = C0
  tmap phi (CN c q) = CN (phi c) (tmap (tmap phi) q)
+
+instance TASequence q => Category (ToCatQueue q c) where
+  id = tempty
+  (.) = flip (><)
