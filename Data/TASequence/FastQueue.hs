@@ -43,7 +43,7 @@ queue f r (h `Cons` t) = RQ f r t
 
 instance TASequence FastQueue where
  tempty = RQ CNil SNil CNil
- tsingleton x = let c = tsingleton x in queue c SNil c
+ tsingleton x = let c = tsingleton x in RQ c SNil c
  (RQ f r a) |> x = queue f (r `Snoc` x) a
 
  tviewl (RQ CNil SNil CNil) = TAEmptyL
