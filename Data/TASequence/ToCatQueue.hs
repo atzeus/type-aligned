@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, PolyKinds #-}
+{-# LANGUAGE GADTs, PolyKinds, ScopedTypeVariables #-}
 
 
 
@@ -39,14 +39,14 @@ instance TASequence q => TASequence (ToCatQueue q) where
  (CN x q)  >< ys  = CN x (q |> ys)
 
  tviewl C0        = TAEmptyL
- tviewl (CN h t)  = h :< linkAll t
-   where 
-    linkAll :: TASequence q =>  q (ToCatQueue q c) a b -> ToCatQueue q c a b
-    linkAll v = case tviewl v of
-     TAEmptyL     -> C0
-     CN x q :< t  -> CN x (q `snoc` linkAll t)
-    snoc q C0  = q
-    snoc q r   = q |> r
+ tviewl (CN x q)  = x :< case tviewl q of
+   TAEmptyL -> C0
+   t :< q'  -> linkAll t q'
+   where
+   linkAll :: ToCatQueue q c x y -> q (ToCatQueue q c) y z -> ToCatQueue q c x z
+   linkAll t@(CN x q) q' = case tviewl q' of
+     TAEmptyL -> t
+     h :< t'  -> CN x (q |> linkAll h t')
 
  tmap phi C0 = C0
  tmap phi (CN c q) = CN (phi c) (tmap (tmap phi) q)
