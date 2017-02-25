@@ -66,6 +66,8 @@ The behaviour of '<|','|>', 'tmap' and 'tviewr' is implied by the above laws and
 -}
 class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
 
+  {-# MINIMAL tempty, tsingleton, (tviewl | tviewr), ((><) | (|>) | (<|)) #-}
+
   tempty     :: s c x x
   tsingleton :: c x y -> s c x y
   -- | Append two type aligned sequences
