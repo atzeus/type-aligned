@@ -121,6 +121,9 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
   -- > tfold = tfoldMap id
   tfold      :: Category c => s c x y -> c x y
 
+  -- | Right-associative fold of a type aligned sequence.
+  tfoldr     :: (forall x y z . c y z -> d x y -> d x z) -> d p q -> s c q r -> d p r
+
   l |> r = l >< tsingleton r
   l <| r = tsingleton l >< r
   l >< r = case tviewl l of
@@ -149,6 +152,8 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
 
   tfold = tfoldMap id
 
+  tfoldr f z t = appEndo (tfoldMap (\ x -> Endo (f x)) t) z
+
 data TAViewL s c x y where
    TAEmptyL  :: TAViewL s c x x
    (:<)     :: c x y -> s c y z -> TAViewL s c x z
@@ -156,3 +161,11 @@ data TAViewL s c x y where
 data TAViewR s c x y where
    TAEmptyR  :: TAViewR s c x x
    (:>)     :: s c x y -> c y z -> TAViewR s c x z
+
+
+-- Approach due to Joachim Breitner: https://stackoverflow.com/a/30986119/88018
+newtype Endo h c d = Endo { appEndo :: forall b. h b c -> h b d  }
+
+instance Category (Endo h) where
+    id = Endo id
+    Endo f1 . Endo f2 = Endo (f1 . f2)
