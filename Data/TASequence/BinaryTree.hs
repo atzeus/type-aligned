@@ -19,6 +19,7 @@ module Data.TASequence.BinaryTree(module Data.TASequence, BinaryTree) where
 
 import  Control.Category
 import  Data.TASequence
+import  Prelude hiding (id)
 
 data BinaryTree c x y where
   Empty :: BinaryTree c x x
@@ -38,6 +39,10 @@ instance TASequence BinaryTree where
   tmap phi Empty = Empty
   tmap phi (Leaf c) = Leaf (phi c)
   tmap phi (Node b b') = Node (tmap phi b) (tmap phi b')
+
+  tfoldMap phi Empty      = id
+  tfoldMap phi (Leaf c)   = phi c
+  tfoldMap phi (Node a b) = tfoldMap phi a >>> tfoldMap phi b
 
 instance Category (BinaryTree c) where
   id = tempty

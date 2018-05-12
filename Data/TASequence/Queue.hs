@@ -23,6 +23,7 @@ module Data.TASequence.Queue(module Data.TASequence,Queue)  where
 
 import Control.Category
 import Data.TASequence
+import Prelude hiding (id)
 
 data P c a b where
   (:*) :: c a w -> c w b -> P c a b
@@ -60,13 +61,24 @@ instance TASequence Queue where
   tmap f (Q1 x) = Q1 (f x)
   tmap f (QN l m r) = QN (tmapb f l) (tmap (tmapp f) m) (tmapb f r)
 
+  tfoldMap f Q0 = id
+  tfoldMap f (Q1 x) = f x
+  tfoldMap f (QN l m r) = tfoldMapb f l >>> tfoldMap (tfoldMapp f) m >>> tfoldMapb f r
+
 instance Category (Queue c) where
   id = tempty
   (.) = flip (><)
 
 tmapp :: (forall x y. c x y -> d x y) -> P c x y -> P d x y
 tmapp phi (a :* b) = phi a :* phi b
-  
+
+tfoldMapp :: Category d => (forall x y. c x y -> d x y) -> P c x y -> d x y
+tfoldMapp phi (a :* b) = phi a >>> phi b
+
 tmapb :: (forall x y. c x y -> d x y) -> B c x y -> B d x y
 tmapb phi (B1 c) = B1 (phi c)
 tmapb phi (B2 p) = B2 (tmapp phi p)
+
+tfoldMapb :: Category d => (forall x y. c x y -> d x y) -> B c x y -> d x y
+tfoldMapb phi (B1 c) = phi c
+tfoldMapb phi (B2 p) = tfoldMapp phi p

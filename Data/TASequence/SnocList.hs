@@ -18,6 +18,7 @@ module Data.TASequence.SnocList(module Data.TASequence,SnocList(..))  where
 
 import Control.Category
 import Data.TASequence
+import Prelude hiding (id)
 
 data SnocList c x y where
   SNil :: SnocList c x x
@@ -31,6 +32,9 @@ instance TASequence SnocList where
   tviewr (Snoc p l) = p :> l
   tmap phi SNil = SNil
   tmap phi (Snoc s c) = Snoc (tmap phi s) (phi c)
+
+  tfoldMap phi SNil = id
+  tfoldMap phi (Snoc s c) = tfoldMap phi s >>> phi c
 
 instance Category (SnocList c) where
   id = tempty
