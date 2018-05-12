@@ -104,7 +104,16 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
   -- >    TAEmptyL -> tempty
   -- >    h :< t -> f h <| tmap f t
   tmap       :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
-  
+
+  -- | Apply a function to all elements in a type aligned sequence, and combine them using a 'Category' instance.
+  --
+  -- Default definition:
+  --
+  -- > tfoldMap f q = case tviewl q of
+  -- >   TAEmptyL -> id
+  -- >   h :< t -> f h >>> tfoldMap f t
+  tfoldMap   :: Category d => (forall x y. c x y -> d x y) -> s c x y -> d x y
+
   l |> r = l >< tsingleton r
   l <| r = tsingleton l >< r
   l >< r = case tviewl l of
@@ -127,6 +136,9 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
     TAEmptyL -> tempty
     h :< t -> f h <| tmap f t
 
+  tfoldMap f q = case tviewl q of
+    TAEmptyL -> id
+    h :< t -> f h >>> tfoldMap f t
 
 data TAViewL s c x y where
    TAEmptyL  :: TAViewL s c x x
