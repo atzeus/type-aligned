@@ -24,6 +24,7 @@ module Data.TASequence.ToCatQueue(module Data.TASequence,ToCatQueue) where
 
 import Control.Category
 import Data.TASequence
+import Prelude hiding (id)
 
 -- | The catenable queue type. The first type argument is the 
 -- type of the queue we use (|>)
@@ -50,6 +51,9 @@ instance TASequence q => TASequence (ToCatQueue q) where
 
  tmap phi C0 = C0
  tmap phi (CN c q) = CN (phi c) (tmap (tmap phi) q)
+
+ tfoldMap phi C0 = id
+ tfoldMap phi (CN c q) = phi c >>> tfoldMap (tfoldMap phi) q
 
 instance TASequence q => Category (ToCatQueue q c) where
   id = tempty
