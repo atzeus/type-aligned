@@ -114,6 +114,13 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
   -- >   h :< t -> f h >>> tfoldMap f t
   tfoldMap   :: Category d => (forall x y. c x y -> d x y) -> s c x y -> d x y
 
+  -- | Combine all elements in a type aligned sequence using a 'Category' instance.
+  --
+  -- Default definition:
+  --
+  -- > tfold = tfoldMap id
+  tfold      :: Category c => s c x y -> c x y
+
   l |> r = l >< tsingleton r
   l <| r = tsingleton l >< r
   l >< r = case tviewl l of
@@ -139,6 +146,8 @@ class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
   tfoldMap f q = case tviewl q of
     TAEmptyL -> id
     h :< t -> f h >>> tfoldMap f t
+
+  tfold = tfoldMap id
 
 data TAViewL s c x y where
    TAEmptyL  :: TAViewL s c x x
