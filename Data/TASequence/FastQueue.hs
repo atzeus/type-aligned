@@ -1,4 +1,8 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE GADTs, ViewPatterns, TypeOperators, PolyKinds #-}
+#if __GLASGOW_HASKELL__ >= 704
+{-# LANGUAGE Trustworthy #-}
+#endif
 
 
 -----------------------------------------------------------------------------
@@ -23,33 +27,40 @@ import Control.Category
 import Data.TASequence
 import Data.TASequence.ConsList
 import Data.TASequence.SnocList
+import Data.TASequence.Any
 
 
 revAppend l r = rotate l r CNil
--- precondtion : |a| = |f| - (|r| - 1)
+-- precondition : |a| = |f| - (|r| - 1)
 -- postcondition: |a| = |f| - |r|
 rotate :: ConsList tc a b -> SnocList tc b c -> ConsList tc c d -> ConsList tc a d
+rotate CNil  SNil r = r
 rotate CNil  (SNil `Snoc` y) r = y `Cons` r
 rotate (x `Cons` f) (r `Snoc` y) a = x `Cons` rotate f r (y `Cons` a)
 rotate f        a     r  = error "Invariant |a| = |f| - (|r| - 1) broken"
 
 data FastQueue tc a b where
-  RQ :: !(ConsList tc a b) -> !(SnocList tc b c) -> !(ConsList tc x b) -> FastQueue tc a c
+  -- We use Any instead of a proper existential to allow GHC to unpack
+  -- FastQueue and to make `tmap` more efficient.  Unfortunately, GHC still
+  -- doesn't know how to unpack existentials, though it has known how to unpack
+  -- GADTs for some time.  We do this only for the schedule, so it doesn't
+  -- weaken the correctness guarantees.
+  RQ :: !(ConsList tc a b) -> !(SnocList tc b c) -> !(ConsList AnyCat Any b) -> FastQueue tc a c
 
-queue :: ConsList tc a b -> SnocList tc b c -> ConsList tc x b -> FastQueue tc a c
+queue :: ConsList tc a b -> SnocList tc b c -> ConsList AnyCat Any b -> FastQueue tc a c
 queue f r CNil = let f' = revAppend f r 
-                 in RQ f' SNil f'
-queue f r (h `Cons` t) = RQ f r t
+                 in RQ f' SNil (toAnyConsList f')
+queue f r (h `Cons` t) = RQ f r (toAnyConsList t)
 
 instance TASequence FastQueue where
- tempty = RQ CNil SNil CNil
- tsingleton x = let c = tsingleton x in RQ c SNil c
+ tempty = RQ CNil SNil (toAnyConsList CNil)
+ tsingleton x = let c = tsingleton x in RQ c SNil (toAnyConsList c)
  (RQ f r a) |> x = queue f (r `Snoc` x) a
 
  tviewl (RQ CNil SNil CNil) = TAEmptyL
  tviewl (RQ (h `Cons` t) f a) = h :< queue t f a
 
- tmap phi (RQ a b c) = RQ (tmap phi a) (tmap phi b) (tmap phi c)
+ tmap phi (RQ a b c) = RQ (tmap phi a) (tmap phi b) (toAnyConsList c)
 
 instance Category (FastQueue c) where
   id = tempty

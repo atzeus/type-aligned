@@ -15,6 +15,7 @@ Tested-With:         GHC==7.6.3
 Library
   Build-Depends: base >= 2 && <= 6
   Exposed-modules: Data.TASequence.BinaryTree, Data.TASequence, Data.TASequence.ConsList, Data.TASequence.FastCatQueue,  Data.TASequence.FastQueue, Data.TASequence.FingerTree, Data.TASequence.Queue, Data.TASequence.SnocList, Data.TASequence.ToCatQueue
+  Other-modules: Data.TASequence.Any
 
   Extensions:	 GADTs, ViewPatterns, TypeOperators, Rank2Types
 
