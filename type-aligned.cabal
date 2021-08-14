@@ -11,13 +11,15 @@ Build-Type:          Simple
 Cabal-Version:       2.0
 Data-files:          ChangeLog
 Category:            Data, Data Structures
-Tested-With:         GHC==7.6.3
+Tested-With:         GHC ==7.4.2 GHC ==7.6.3 GHC ==7.8.4 GHC ==7.10.3 GHC ==8.0.2 GHC ==8.2.2 GHC ==8.4.4 GHC ==8.6.5 GHC ==8.8.4 GHC ==8.10.4
+
 Library
+  Default-Language: Haskell2010
   Build-Depends: base >= 2 && <= 6
   Exposed-modules: Data.TASequence.BinaryTree, Data.TASequence, Data.TASequence.ConsList, Data.TASequence.FastCatQueue,  Data.TASequence.FastQueue, Data.TASequence.FingerTree, Data.TASequence.Queue, Data.TASequence.SnocList, Data.TASequence.ToCatQueue
   Other-modules: Data.TASequence.Any
 
-  Extensions:	 GADTs, ViewPatterns, TypeOperators, Rank2Types
+  Other-Extensions: GADTs, ViewPatterns, TypeOperators, RankNTypes, PolyKinds
 
 
 test-suite type-aligned-test

@@ -1,5 +1,8 @@
-{-# LANGUAGE Rank2Types,GADTs, DataKinds, PolyKinds, TypeOperators #-}
-
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE Rank2Types,GADTs, DataKinds, TypeOperators #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
+#endif
 
 
 -----------------------------------------------------------------------------

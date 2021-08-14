@@ -1,5 +1,8 @@
-{-# LANGUAGE GADTs, PolyKinds #-}
-
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE GADTs #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
+#endif
 
 
 -----------------------------------------------------------------------------

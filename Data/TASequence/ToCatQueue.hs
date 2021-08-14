@@ -1,5 +1,9 @@
-{-# LANGUAGE GADTs, PolyKinds, ScopedTypeVariables #-}
-
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
+#endif
 
 
 -----------------------------------------------------------------------------
