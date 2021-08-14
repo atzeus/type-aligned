@@ -8,7 +8,7 @@ Author:              Atze van der Ploeg
 Maintainer:          atzeus@gmail.com
 Homepage:            https://github.com/atzeus/type-aligned
 Build-Type:          Simple
-Cabal-Version:       >=1.6
+Cabal-Version:       2.0
 Data-files:          ChangeLog
 Category:            Data, Data Structures
 Tested-With:         GHC==7.6.3
@@ -18,6 +18,31 @@ Library
   Other-modules: Data.TASequence.Any
 
   Extensions:	 GADTs, ViewPatterns, TypeOperators, Rank2Types
+
+
+test-suite type-aligned-test
+  if impl(ghc < 7.10)
+    buildable: False
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   test
+  default-language: Haskell2010
+  main-is:          Test.hs
+  build-depends:    base >=4.5 && < 5
+                  , type-aligned
+                  , tasty >= 1.4
+                  , QuickCheck
+                  , tasty-quickcheck
+
+test-suite do-nothing
+  if impl(ghc >= 7.10)
+    buildable: False
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   fake-test
+  default-language: Haskell2010
+  main-is:          Test.hs
+  build-depends:    base >=4.5 && < 5
+
+
 
 source-repository head
     type:     git
