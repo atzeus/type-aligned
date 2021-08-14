@@ -30,6 +30,7 @@ import Data.TASequence.SnocList
 import Data.TASequence.Any
 
 
+revAppend :: ConsList tc a b -> SnocList tc b d -> ConsList tc a d
 revAppend l r = rotate l r CNil
 -- precondition : |a| = |f| - (|r| - 1)
 -- postcondition: |a| = |f| - |r|
