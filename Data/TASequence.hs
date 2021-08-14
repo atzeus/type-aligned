@@ -1,5 +1,8 @@
-{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types, KindSignatures, PolyKinds #-}
-
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE GADTs,TypeSynonymInstances,FlexibleInstances,Rank2Types, KindSignatures #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
+#endif
 
 
 -----------------------------------------------------------------------------
@@ -64,7 +67,11 @@ Observation laws:
 
 The behaviour of '<|','|>', 'tmap' and 'tviewr' is implied by the above laws and their default definitions.
 -}
+#if __GLASGOW_HASKELL__ >= 706
 class TASequence (s :: (k -> k -> *) -> k -> k -> *) where
+#else
+class TASequence s where
+#endif
 
   {-# MINIMAL tempty, tsingleton, (tviewl | tviewr), ((><) | (|>) | (<|)) #-}
 

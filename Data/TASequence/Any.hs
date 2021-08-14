@@ -1,8 +1,9 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE PolyKinds #-}
-#if __GLASGOW_HASKELL__ >= 704
 {-# LANGUAGE Trustworthy #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
 #endif
 -- We suppress this warning because otherwise GHC complains
 -- about the newtype constructor not being used.
@@ -26,16 +27,19 @@ import Unsafe.Coerce
 
 #if __GLASGOW_HASKELL__ >= 800
 type family Any :: k where
-#else
+#elif __GLASGOW_HASKELL__ >= 706
 -- Closed type families used to need at least one instance. By hiding the
 -- family itself and only exposing the synonym, we prevent instantiation.
 -- It's a bit weird that this works even with TypeSynonymInstances, but
 -- that's a bit lucky.
 type Any = Any'
 type family Any' :: k
+#else
+type Any = Any'
+type family Any'
 #endif
 
-newtype AnyCat (a :: k) (b :: k) = AnyCat Any
+newtype AnyCat a b = AnyCat Any
 
 -- | Convert a list of anything to a list of 'Any'.
 toAnyConsList :: ConsList tc a c -> ConsList AnyCat Any c

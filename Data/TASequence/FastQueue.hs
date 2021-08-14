@@ -1,7 +1,8 @@
 {-# LANGUAGE CPP #-}
-{-# LANGUAGE GADTs, ViewPatterns, TypeOperators, PolyKinds #-}
-#if __GLASGOW_HASKELL__ >= 704
+{-# LANGUAGE GADTs, ViewPatterns, TypeOperators #-}
 {-# LANGUAGE Trustworthy #-}
+#if __GLASGOW_HASKELL__ >= 706
+{-# LANGUAGE PolyKinds #-}
 #endif
 
 
