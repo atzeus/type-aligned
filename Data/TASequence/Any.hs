@@ -19,6 +19,7 @@
 module Data.TASequence.Any
   ( Any
   , AnyCat
+  , toAny
   , toAnyConsList
   ) where
 
@@ -41,6 +42,10 @@ type family Any'
 
 newtype AnyCat a b = AnyCat Any
 
--- | Convert a list of anything to a list of 'Any'.
-toAnyConsList :: ConsList tc a c -> ConsList AnyCat Any c
+-- | Convert anything to 'AnyCat'.
+toAny :: c x y -> AnyCat x y
+toAny = unsafeCoerce
+
+-- | Convert a list of anything to a list of 'AnyCat'.
+toAnyConsList :: ConsList tc a c -> ConsList AnyCat d e
 toAnyConsList = unsafeCoerce
