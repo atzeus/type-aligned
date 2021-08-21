@@ -27,6 +27,7 @@ module Data.TASequence.FingerTree (module Data.TASequence, FingerTree ) where
 
 import Control.Category
 import Data.TASequence
+import Prelude hiding (id)
 
 
 data FingerTree r a b where
@@ -73,6 +74,10 @@ instance TASequence FingerTree where
   tmap f Empty = Empty
   tmap f (Single a) = Single (f a)
   tmap f (Deep l m r) = Deep (mapd f l) (tmap (mapn f) m) (mapd f r)
+
+  tfoldMap f Empty = id
+  tfoldMap f (Single a) = f a
+  tfoldMap f (Deep l m r) = foldMapd f l >>> tfoldMap (foldMapn f) m >>> foldMapd f r
 
 instance Category (FingerTree c) where
   id = tempty
@@ -197,11 +202,19 @@ nodes (a ::: b ::: c ::: xs) = Node3 a b c ::: nodes xs
 mapn :: (forall x y. c x y -> d x y) -> Node c x y -> Node d x y
 mapn phi (Node2 r s) = Node2 (phi r) (phi s)
 mapn phi (Node3 r s t) = Node3 (phi r) (phi s) (phi t)
-  
+
+foldMapn :: Category d => (forall x y. c x y -> d x y) -> Node c x y -> d x y
+foldMapn phi (Node2 r s) = phi r >>> phi s
+foldMapn phi (Node3 r s t) = phi r >>> phi s >>> phi t
+
 mapd :: (forall x y. c x y -> d x y) -> Digit c x y -> Digit d x y
 mapd phi (One r) = One (phi r) 
 mapd phi (Two r s) = Two (phi r) (phi s)
 mapd phi (Three r s t) = Three (phi r) (phi s) (phi t)
 mapd phi (Four r s t u) = Four (phi r) (phi s) (phi t) (phi u)
 
-
+foldMapd :: Category d => (forall x y. c x y -> d x y) -> Digit c x y -> d x y
+foldMapd phi (One r) = phi r
+foldMapd phi (Two r s) = phi r >>> phi s
+foldMapd phi (Three r s t) = phi r >>> phi s >>> phi t
+foldMapd phi (Four r s t u) = phi r >>> phi s >>> phi t >>> phi u

@@ -113,7 +113,29 @@ class TASequence s where
   -- >    TAEmptyL -> tempty
   -- >    h :< t -> f h <| tmap f t
   tmap       :: (forall x y. c x y -> d x y) -> s c x y -> s d x y
-  
+
+  -- | Apply a function to all elements in a type aligned sequence, and combine them using a 'Category' instance.
+  --
+  -- Default definition:
+  --
+  -- > tfoldMap f q = case tviewl q of
+  -- >   TAEmptyL -> id
+  -- >   h :< t -> f h >>> tfoldMap f t
+  tfoldMap   :: Category d => (forall x y. c x y -> d x y) -> s c x y -> d x y
+
+  -- | Combine all elements in a type aligned sequence using a 'Category' instance.
+  --
+  -- Default definition:
+  --
+  -- > tfold = tfoldMap id
+  tfold      :: Category c => s c x y -> c x y
+
+  -- | Right-associative fold of a type aligned sequence.
+  tfoldr     :: (forall x y z . c x y -> d y z -> d x z) -> d q r -> s c p q -> d p r
+
+  -- | Left-associative fold of a type aligned sequence.
+  tfoldl     :: (forall x y z . d x y -> c y z -> d x z) -> d p q -> s c q r -> d p r
+
   l |> r = l >< tsingleton r
   l <| r = tsingleton l >< r
   l >< r = case tviewl l of
@@ -136,6 +158,15 @@ class TASequence s where
     TAEmptyL -> tempty
     h :< t -> f h <| tmap f t
 
+  tfoldMap f q = case tviewl q of
+    TAEmptyL -> id
+    h :< t -> f h >>> tfoldMap f t
+
+  tfold = tfoldMap id
+
+  tfoldr f z t = appEndoR (tfoldMap (\ x -> EndoR (\ y -> f x y)) t) z
+
+  tfoldl f z t = appEndoL (tfoldMap (\ x -> EndoL (\ y -> f y x)) t) z
 
 data TAViewL s c x y where
    TAEmptyL  :: TAViewL s c x x
@@ -144,3 +175,17 @@ data TAViewL s c x y where
 data TAViewR s c x y where
    TAEmptyR  :: TAViewR s c x x
    (:>)     :: s c x y -> c y z -> TAViewR s c x z
+
+
+-- Approach adapted from Joachim Breitner: https://stackoverflow.com/a/30986119/88018
+newtype EndoR h c d = EndoR { appEndoR :: forall b. h d b -> h c b  }
+
+instance Category (EndoR h) where
+  id = EndoR id
+  EndoR f1 . EndoR f2 = EndoR (f2 . f1)
+
+newtype EndoL h c d = EndoL { appEndoL :: forall b . h b c -> h b d }
+
+instance Category (EndoL h) where
+  id = EndoL id
+  EndoL f1 . EndoL f2 = EndoL (f1 . f2)
